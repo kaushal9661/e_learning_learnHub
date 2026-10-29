@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LearnHub – Student Learning Management System</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    <div id="toast-container" class="toast-container"></div>
+
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fa-solid fa-graduation-cap logo-icon"></i>
+                    <div class="logo-text">
+                        <span class="brand-name">LearnHub</span>
+                        <span class="tagline">Learn • Grow • Succeed</span>
+                    </div>
+                </div>
+                <button class="close-sidebar-btn" id="closeSidebar"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#dashboard" class="nav-item active" data-view="dashboard">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#course-library" class="nav-item" data-view="course-library">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Course Library</span>
+                </a>
+                <a href="#my-courses" class="nav-item" data-view="my-courses">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>My Courses</span>
+                </a>
+                <a href="#quiz" class="nav-item" data-view="quiz">
+                    <i class="fa-solid fa-clipboard-question"></i>
+                    <span>Quiz & Assessment</span>
+                </a>
+                <a href="#progress" class="nav-item" data-view="progress">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>My Progress</span>
+                </a>
+                <a href="#assignments" class="nav-item" data-view="assignments">
+                    <i class="fa-solid fa-file-signature"></i>
+                    <span>Assignments</span>
+                </a>
+                <a href="#profile" class="nav-item" data-view="profile">
+                    <i class="fa-solid fa-user-gear"></i>
+                    <span>Profile</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="theme-toggle-wrapper">
+                    <span><i class="fa-solid fa-moon"></i> Dark Mode</span>
+                    <label class="switch">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+
+                <div class="motivational-card">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <p id="motivationalQuote">"Learning never exhausts the mind."</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navigation Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" id="openSidebar">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="search-bar-container">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="globalSearch" placeholder="Search courses, topics, or assignments...">
+                        <div id="searchResults" class="search-results-dropdown hidden"></div>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <div class="notification-wrapper">
+                        <button class="icon-btn" id="notificationBtn">
+                            <i class="fa-regular fa-bell"></i>
+                            <span class="notification-badge" id="notifBadge">3</span>
+                        </button>
+                        <div class="notification-dropdown hidden" id="notificationDropdown">
+                            <div class="notif-header">
+                                <h3>Notifications</h3>
+                                <button id="markAllReadBtn">Mark all as read</button>
+                            </div>
+                            <ul class="notif-list" id="notifList">
+                                <li class="unread">
+                                    <i class="fa-solid fa-clock text-amber"></i>
+                                    <div>
+                                        <p>MySQL Project due in 2 days</p>
+                                        <small>2 hours ago</small>
+                                    </div>
+                                </li>
+                                <li class="unread">
+                                    <i class="fa-solid fa-circle-check text-teal"></i>
+                                    <div>
+                                        <p>Quiz 2 graded: 90% Score</p>
+                                        <small> Yesterday</small>
+                                    </div>
+                                </li>
+                                <li>
+                                    <i class="fa-solid fa-award text-blue"></i>
+                                    <div>
+                                        <p>New course recommendation added</p>
+                                        <small>3 days ago</small>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="user-profile-menu">
+                        <div class="avatar-container" id="profileDropdownBtn">
+                            <img src="kph.jpg" alt="Avatar" id="headerAvatar">
+                            <span class="user-name" id="headerUserName">Kaushal Kumar</span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="profile-dropdown hidden" id="profileDropdown">
+                            <a href="#profile" data-view="profile"><i class="fa-solid fa-id-badge"></i> View Profile</a>
+                            <a href="#progress" data-view="progress"><i class="fa-solid fa-certificate"></i> My Certificates</a>
+                            <hr>
+                            <a href="#" id="resetDemoBtn"><i class="fa-solid fa-rotate-right"></i> Reset Demo Data</a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dynamic SPA Content Views -->
+            <div class="content-body">
+                
+                <!-- 1. DASHBOARD VIEW -->
+                <section id="view-dashboard" class="spa-view active">
+                    <!-- Welcome Banner -->
+                    <div class="welcome-banner">
+                        <div class="banner-content">
+                            <span class="greeting-badge" id="greetingUser">Hello, Amit 👋</span>
+                            <h1>Keep Learning, Keep Growing!</h1>
+                            <p>Your future is built by what you learn today. You have 2 assignments pending this week.</p>
+                            <div class="banner-actions">
+                                <button class="btn btn-primary" data-navigate="course-library">Explore Courses</button>
+                                <button class="btn btn-secondary" data-navigate="progress">View My Progress</button>
+                            </div>
+                        </div>
+                        <div class="banner-illustration">
+                            <svg width="220" height="160" viewBox="0 0 200 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="30" y="40" width="140" height="90" rx="8" fill="#172554" opacity="0.8"/>
+                                <rect x="40" y="50" width="120" height="70" rx="4" fill="#38BDF8"/>
+                                <path d="M70 130 L130 130 L140 140 L60 140 Z" fill="#94A3B8"/>
+                                <circle cx="100" cy="85" r="18" fill="#14B8A6"/>
+                                <path d="M92 85 L98 90 L108 80" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                                <circle cx="30" cy="110" r="15" fill="#F59E0B"/>
+                                <rect x="155" y="80" width="20" height="40" rx="2" fill="#10B981"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-teal-light"><i class="fa-solid fa-book-bookmark text-teal"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statEnrolled">4</h3>
+                                <p>Enrolled Courses</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-blue-light"><i class="fa-solid fa-circle-check text-blue"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statLessons">28</h3>
+                                <p>Completed Lessons</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-amber-light"><i class="fa-solid fa-clock text-amber"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statHours">42.5 hrs</h3>
+                                <p>Learning Hours</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-purple-light"><i class="fa-solid fa-award text-purple"></i></div>
+                            <div class="stat-info">
+                                <h3 id="statQuizAvg">88%</h3>
+                                <p>Quiz Average</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Main Section: Continue Learning & Sidebar Widgets -->
+                    <div class="dashboard-grid">
+                        <div class="dashboard-main-col">
+                            <div class="section-header">
+                                <h2>Continue Learning</h2>
+                                <a href="#my-courses" class="link-btn" data-navigate="my-courses">View All My Courses</a>
+                            </div>
+
+                            <div class="course-cards-grid" id="continueLearningGrid">
+                                <!-- Dynamic Course Cards injected by JS -->
+                            </div>
+
+                            <!-- Weekly Learning Activity Chart -->
+                            <div class="card chart-card mt-6">
+                                <div class="section-header">
+                                    <h2>Weekly Learning Activity</h2>
+                                    <span class="badge text-teal bg-teal-light">This Week: 12.5 hrs</span>
+                                </div>
+                                <div class="chart-container">
+                                    <canvas id="activityChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Dashboard Right Sidebar Widgets -->
+                        <div class="dashboard-side-col">
+                            <!-- Learning Goals -->
+                            <div class="card widget-card">
+                                <h3><i class="fa-solid fa-bullseye text-teal"></i> Personal Learning Goals</h3>
+                                <div class="goal-item">
+                                    <div class="goal-header">
+                                        <span>Complete 5 Python Lessons/wk</span>
+                                        <span id="goal1Percent">80%</span>
+                                    </div>
+                                    <div class="progress-bar-bg"><div class="progress-bar-fill" id="goal1Fill" style="width: 80%;"></div></div>
+                                </div>
+                                <div class="goal-item mt-4">
+                                    <div class="goal-header">
+                                        <span>Daily Study Goal (2 hrs/day)</span>
+                                        <span id="goal2Percent">65%</span>
+                                    </div>
+                                    <div class="progress-bar-bg"><div class="progress-bar-fill bg-secondary" id="goal2Fill" style="width: 65%;"></div></div>
+                                </div>
+                            </div>
+
+                            <!-- Upcoming Deadlines -->
+                            <div class="card widget-card mt-4">
+                                <h3><i class="fa-solid fa-calendar-day text-amber"></i> Upcoming Deadlines</h3>
+                                <ul class="deadline-list">
+                                    <li class="deadline-item warning">
+                                        <div class="date-badge">Oct 31</div>
+                                        <div>
+                                            <h4>MySQL Database Design Submission</h4>
+                                            <p>Database Management • 11:59 PM</p>
+                                        </div>
+                                    </li>
+                                    <li class="deadline-item">
+                                        <div class="date-badge">Nov 03</div>
+                                        <div>
+                                            <h4>Python Data Quiz #3</h4>
+                                            <p>Data Science • Online Test</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Daily Tip -->
+                            <div class="card widget-card tip-card mt-4">
+                                <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Daily Learning Tip</h3>
+                                <p id="dailyTipText">"Use the Feynman Technique: Try to explain a new programming concept in simple plain English as if teaching a beginner."</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. COURSE LIBRARY VIEW -->
+                <section id="view-course-library" class="spa-view">
+                    <div class="page-title-box">
+                        <h1>Course Library</h1>
+                        <p>Explore high-quality courses curated for modern software development and data science.</p>
+                    </div>
+
+                    <!-- Category Filters -->
+                    <div class="filter-bar">
+                        <button class="filter-btn active" data-category="all">All Courses</button>
+                        <button class="filter-btn" data-category="web">Web Development</button>
+                        <button class="filter-btn" data-category="python">Python & Data</button>
+                        <button class="filter-btn" data-category="db">Database</button>
+                        <button class="filter-btn" data-category="ai">AI & ML</button>
+                    </div>
+
+                    <div class="course-library-grid" id="libraryGrid">
+                        <!-- Dynamic library cards -->
+                    </div>
+                </section>
+
+                <!-- 3. MY COURSES VIEW -->
+                <section id="view-my-courses" class="spa-view">
+                    <div class="page-title-box">
+                        <h1>My Enrolled Courses</h1>
+                        <p>Track your active courses, complete interactive lessons, and mark modules as done.</p>
+                    </div>
+
+                    <div class="my-courses-container" id="myCoursesList">
+                        <!-- Dynamic expanded course progress cards -->
+                    </div>
+                </section>
+
+                <!-- 4. QUIZ & ASSESSMENT VIEW -->
+                <section id="view-quiz" class="spa-view">
+                    <div class="page-title-box">
+                        <h1>Interactive Assessment Engine</h1>
+                        <p>Test your knowledge with real-time feedback and score calculations.</p>
+                    </div>
+
+                    <div class="quiz-container card" id="quizContainer">
+                        <div class="quiz-start-state" id="quizStartState">
+                            <div class="quiz-hero-icon"><i class="fa-solid fa-brain"></i></div>
+                            <h2>Web Development & Programming Fundamentals Quiz</h2>
+                            <p>5 Questions • Time Limit: 3 Minutes • Passing Score: 60%</p>
+                            <button class="btn btn-primary btn-lg mt-4" id="startQuizBtn">Start Quiz Now</button>
+                        </div>
+
+                        <div class="quiz-active-state hidden" id="quizActiveState">
+                            <div class="quiz-header">
+                                <span class="quiz-progress-text" id="quizProgressText">Question 1 of 5</span>
+                                <div class="quiz-timer"><i class="fa-solid fa-stopwatch"></i> <span id="timerDisplay">03:00</span></div>
+                            </div>
+
+                            <div class="quiz-question-box mt-4">
+                                <h3 id="questionTitle">Loading Question...</h3>
+                                <div class="quiz-options-list" id="quizOptionsList">
+                                    <!-- Options injected dynamically -->
+                                </div>
+                            </div>
+
+                            <div class="quiz-footer mt-6">
+                                <button class="btn btn-secondary" id="nextQuizBtn" disabled>Next Question</button>
+                            </div>
+                        </div>
+
+                        <div class="quiz-results-state hidden" id="quizResultsState">
+                            <div class="quiz-result-header">
+                                <div class="result-badge-icon" id="resultIcon"><i class="fa-solid fa-trophy"></i></div>
+                                <h2 id="resultTitle">Quiz Completed!</h2>
+                                <p id="resultSubtitle">Great job completing your assessment.</p>
+                            </div>
+
+                            <div class="result-stats-row">
+                                <div class="res-card">
+                                    <span class="res-val" id="resScore">0/5</span>
+                                    <span class="res-lbl">Score</span>
+                                </div>
+                                <div class="res-card">
+                                    <span class="res-val" id="resPercent">0%</span>
+                                    <span class="res-lbl">Percentage</span>
+                                </div>
+                                <div class="res-card">
+                                    <span class="res-val" id="resStatus">PASSED</span>
+                                    <span class="res-lbl">Status</span>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 flex-center">
+                                <button class="btn btn-primary" id="restartQuizBtn">Retake Quiz</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. MY PROGRESS VIEW -->
+                <section id="view-progress" class="spa-view">
+                    <div class="page-title-box">
+                        <h1>Learning Progress & Analytics</h1>
+                        <p>Detailed performance analytics, quiz records, and verified completion certificates.</p>
+                    </div>
+
+                    <div class="progress-stats-grid">
+                        <div class="card stat-card">
+                            <h3>Overall Progress</h3>
+                            <div class="progress-ring-box">
+                                <div class="big-percent" id="overallProgressText">68%</div>
+                                <div class="progress-bar-bg mt-2"><div class="progress-bar-fill" id="overallProgressBar" style="width: 68%;"></div></div>
+                            </div>
+                        </div>
+
+                        <div class="card stat-card">
+                            <h3>Certificates Earned</h3>
+                            <div class="cert-count-display">
+                                <i class="fa-solid fa-award text-amber"></i>
+                                <span id="certCount">1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-6">
+                        <h2>Earned Certificates Preview</h2>
+                        <div class="certificate-preview-box mt-4" id="certificateBox">
+                            <div class="cert-border">
+                                <i class="fa-solid fa-graduation-cap cert-watermark"></i>
+                                <h3>CERTIFICATE OF COMPLETION</h3>
+                                <p>This is to certify that</p>
+                                <h2 id="certStudentName">Amit Kumar</h2>
+                                <p>has successfully completed all requirements for</p>
+                                <h4 id="certCourseName">Complete Web Development Bootcamp</h4>
+                                <div class="cert-footer">
+                                    <div><span>Issued:</span> <strong>October 2026</strong></div>
+                                    <div><span>Instructor:</span> <strong>Alex Johnson</strong></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 6. ASSIGNMENTS VIEW -->
+                <section id="view-assignments" class="spa-view">
+                    <div class="page-title-box">
+                        <h1>Assignments & Submissions</h1>
+                        <p>Submit your course projects and monitor review feedback.</p>
+                    </div>
+
+                    <div class="card">
+                        <table class="assignments-table">
+                            <thead>
+                                <tr>
+                                    <th>Assignment Name</th>
+                                    <th>Course</th>
+                                    <th>Due Date</th>
+                                    <th>Status</th>
+                                    <th>Action / Submission</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assignmentsTableBody">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- 7. PROFILE VIEW -->
+                <section id="view-profile" class="spa-view">
+                    <div class="page-title-box">
+                        <h1>Student Profile</h1>
+                        <p>Manage your account settings, personal information, and avatar.</p>
+                    </div>
+
+                    <div class="profile-grid">
+                        <div class="card profile-card">
+                            <div class="profile-avatar-wrapper">
+                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Avatar" id="profileFormAvatar">
+                                <button class="change-avatar-btn" id="changeAvatarBtn"><i class="fa-solid fa-camera"></i></button>
+                            </div>
+                            <h2 id="profileDisplayName">Amit Kumar</h2>
+                            <p class="text-muted" id="profileDisplayMajor">Computer Science Student</p>
+                        </div>
+
+                        <div class="card profile-form-card">
+                            <h2>Edit Profile Information</h2>
+                            <form id="profileForm" class="mt-4">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input type="text" id="inputName" class="form-control" value="Amit Kumar" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input type="email" id="inputEmail" class="form-control" value="amit.kumar@learnhub.edu" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Academic Major / Field</label>
+                                    <input type="text" id="inputMajor" class="form-control" value="Computer Science & Engineering">
+                                </div>
+                                <div class="form-group">
+                                    <label>Primary Learning Goal</label>
+                                    <input type="text" id="inputGoal" class="form-control" value="Full-Stack Web Development & Data Science Mastery">
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-2">Save Profile Updates</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Course Detail Modal -->
+    <div class="modal-overlay hidden" id="courseModal">
+        <div class="modal-card">
+            <button class="modal-close" id="closeCourseModal">&times;</button>
+            <div id="courseModalBody"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
